@@ -1,8 +1,10 @@
 package com.example.config;
 
 import com.example.entity.RestBean;
+import com.example.entity.dto.Account;
 import com.example.entity.vo.response.AuthorizeVO;
 import com.example.filter.JwtAuthorizeFilter;
+import com.example.service.AccountService;
 import com.example.utils.JWTUtils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.ServletException;
@@ -35,9 +37,10 @@ public class SecurityConfiguration {
 
 	@Resource
 	private JWTUtils Utils;
-
 	@Resource
 	private JwtAuthorizeFilter jwtAuthorizeFilter;
+	@Resource
+	private AccountService accountService;
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 		return httpSecurity
@@ -77,12 +80,13 @@ public class SecurityConfiguration {
 										Authentication authentication) throws IOException {
 		response.setContentType("application/json;charset=utf-8");
 		User user = (User) authentication.getPrincipal();
-		String token = Utils.CreateJwt(user, 1, "小明");
+		Account account = accountService.findAccountByNameOrEmail(user.getUsername());
+		String token = Utils.CreateJwt(user, account.getId(),account.getUsername());
 		AuthorizeVO vo = new AuthorizeVO();
 		vo.setExpire(Utils.expireTime());
-		vo.setRole("user");
+		vo.setRole(account.getRole());
         vo.setToken(token);
-		vo.setUsername("小明");
+		vo.setUsername(account.getUsername());
 		response.getWriter().write(RestBean.success(vo).asJsonString());
 	}
 

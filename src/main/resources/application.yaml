@@ -3,3 +3,8 @@ spring:
     jwt:
       key: abcdefghijklmn
       expire: 7
+  data:
+    redis:
+      host: 192.168.75.133
+      client-type: lettuce
+      password: 20011118

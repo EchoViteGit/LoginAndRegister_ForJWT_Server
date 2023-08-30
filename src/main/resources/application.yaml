@@ -4,6 +4,23 @@ spring:
       key: abcdefghijklmn
       expire: 7
 
+  mail:
+    host: smtp.163.com
+    password: WPEUJPCKOTXJHWKM
+    username: redis_validate_007@163.com
+    port: 465
+    properties:
+      from: redis_validate_007@163.com
+      mail:
+        smtp:
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+  rabbitmq:
+    username: root
+    addresses: 192.168.75.129
+    password: 20011118
+    port: 5672
+
   datasource:
     url: jdbc:mysql://localhost:3306/jwt?useUnicode=true&characterEncoding=utf-8
     username: root
@@ -12,6 +29,6 @@ spring:
 
   data:
     redis:
-      host: 192.168.75.133
+      host: 192.168.75.129
       client-type: lettuce
-      password: 20011118
+

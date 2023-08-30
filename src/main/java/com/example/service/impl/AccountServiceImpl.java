@@ -60,7 +60,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 	@Override
 	public String registerEmailVerifyCode(String type, String email, String ip) {
 		synchronized (ip.intern()){
-			if(this.verifyLimit(ip)){
+			if(!this.verifyLimit(ip)){
 				return "请求频繁，请稍后再试！";
 			}
 			Random random = new Random();

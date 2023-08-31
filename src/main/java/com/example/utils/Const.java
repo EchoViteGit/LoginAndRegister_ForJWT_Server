@@ -14,4 +14,7 @@ public class Const {
 
 	public static final int VERIFY_EMAIL_LIMIT_TIME = 60;//限流事件：s
 	public static final int ORDER_CORS = -102;
+	public static final int ORDER_LIMIT = -101;
+	public static final String FLOW_LIMIT_COUNTER = "flow:counter:";
+	public static final String FLOW_LIMIT_BLOCK = "flow:block:";
 }

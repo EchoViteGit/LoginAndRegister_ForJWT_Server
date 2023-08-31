@@ -22,7 +22,7 @@ public class FlowUtils {
 		if(Boolean.TRUE.equals(template.hasKey(key))){
 			return false;
 		}else {
-			template.opsForValue().set(key,"",blockTime, TimeUnit.SECONDS);
+			template.opsForValue().set(key,"限流",blockTime, TimeUnit.SECONDS);
 			return true;
 		}
 	}

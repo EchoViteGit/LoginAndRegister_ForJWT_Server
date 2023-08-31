@@ -5,6 +5,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
@@ -45,7 +46,11 @@ public class MailQueueListener {
 		};
 		if (message == null)
 			return;
-		sender.send(message);
+		try {
+			sender.send(message);
+		}catch (MailSendException exception){
+			System.out.println(exception.getMessage());
+		}
 	}
 
 	public SimpleMailMessage createMessage(String title, String content, String email) {

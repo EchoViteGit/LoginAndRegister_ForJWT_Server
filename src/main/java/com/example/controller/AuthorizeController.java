@@ -31,6 +31,14 @@ public class AuthorizeController {
 
 	@Resource
 	AccountService service;
+
+	/**
+	 * 请求邮件验证码
+	 * @param email 请求邮件
+	 * @param type 类型
+	 * @param request 请求
+	 * @return 是否请求成功
+	 */
 	@GetMapping("/ask-code")
 	public RestBean<Void> askVerifyCode(@RequestParam @Email String email,
 										@RequestParam @Pattern(regexp = "(register|reset)") String type,
@@ -38,6 +46,12 @@ public class AuthorizeController {
 		return this.messageHandle(()->
 				service.registerEmailVerifyCode(type, email,request.getRemoteAddr()));
 	}
+
+	/***
+	 * 实现注册功能
+	 * @param vo 接受封装的实体对象
+	 * @return 是否注册成功
+	 */
 	@PostMapping("/register")
 	public RestBean<Void> register(@RequestBody @Valid EmailRegisterVO vo){
 		return this.messageHandle(vo,service::registerEmailAccount);

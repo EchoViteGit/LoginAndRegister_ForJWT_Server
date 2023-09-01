@@ -127,13 +127,19 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 	@Override
 	public String resetConfirm(ConfirmResetVO vo) {
 		String email = vo.getEmail();
+		Account account = this.findAccountByNameOrEmail(email);
 		String code = stringRedisTemplate.opsForValue().get(Const.VERIFY_EMAIL_DATA + email);
 		if (code == null)
 			return "请先获取验证码！";
 		if(!code.equals(vo.getCode())){
 			return "验证码错误";
 		}
-		return null;
+		if(account != null){
+			return null;
+		}
+		else {
+			return "没有与此邮箱绑定的账号！";
+		}
 	}
 
 	private boolean existsAccountByEmail(String email){

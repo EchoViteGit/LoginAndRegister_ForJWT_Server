@@ -17,7 +17,7 @@ public class EmailRegisterVO {
 	@Email
 	@Length(min = 6)
 	String email;
-	@Length(max = 6,min = 6)
+	@Length(max = 6,min = 6,message = "验证码长度为6位")
 	String code;
 	@Pattern(regexp = "^[a-zA-Z0-9\\u4e00-\\u9fa5]+$",message = "不能有特殊字符")
 	@Length(min = 4,max = 10)

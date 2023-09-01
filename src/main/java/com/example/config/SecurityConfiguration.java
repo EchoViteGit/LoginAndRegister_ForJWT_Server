@@ -31,7 +31,10 @@ import java.io.PrintWriter;
  * @author 郭宏洋
  * @version 1.0.0
  * @DateTime 2023/8/28 20:29
+ *
+ * SpringSecurity的配置
  */
+
 @Configuration
 public class SecurityConfiguration {
 
@@ -75,18 +78,25 @@ public class SecurityConfiguration {
 				.build();
     }
 
+	/***
+	 * 成功登录
+	 * @param request 请求
+	 * @param response 回答
+	 * @param authentication 身份验证
+	 * @throws IOException 异常
+	 */
 	public void onAuthenticationSuccess(HttpServletRequest request,
 										HttpServletResponse response,
 										Authentication authentication) throws IOException {
 		response.setContentType("application/json;charset=utf-8");
 		User user = (User) authentication.getPrincipal();
 		Account account = accountService.findAccountByNameOrEmail(user.getUsername());
-		String token = Utils.CreateJwt(user, account.getId(),account.getUsername());
+		String token = Utils.CreateJwt(user, account.getId(),account.getUsername());//生成令牌
 		AuthorizeVO vo = account.asViewObject(AuthorizeVO.class,v->{
 			v.setExpire(Utils.expireTime());
-			v.setToken(token);
+			v.setToken(token); //派发令牌
 		});
-		response.getWriter().write(RestBean.success(vo).asJsonString());
+		response.getWriter().write(RestBean.success(vo).asJsonString()); //回显数据给前端
 	}
 
 	public void onAuthenticationFailure(HttpServletRequest request,

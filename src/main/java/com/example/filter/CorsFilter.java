@@ -17,6 +17,8 @@ import java.io.IOException;
  * @author 郭宏洋
  * @version 1.0.0
  * @DateTime 2023/8/29 18:53
+ *
+ * 解决跨域问题
  */
 @Component
 @Order(Const.ORDER_CORS)

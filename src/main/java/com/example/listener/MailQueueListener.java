@@ -14,6 +14,7 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import java.io.PrintStream;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -25,6 +26,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 @RabbitListener(queues = "mail")
+//使用消息队列解决验证码发送问题
 public class MailQueueListener {
 	@Resource
 	JavaMailSender sender;

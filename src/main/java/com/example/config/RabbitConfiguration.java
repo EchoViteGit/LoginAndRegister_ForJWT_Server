@@ -14,6 +14,10 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class RabbitConfiguration {
+	/***
+	 *  RabbitMQ报文队列
+	 * @return 队列
+	 */
 	@Bean("emailQueue")
 	public Queue emailQueue(){
 		return QueueBuilder

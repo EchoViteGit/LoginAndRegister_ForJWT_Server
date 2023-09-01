@@ -13,7 +13,6 @@ import jakarta.validation.constraints.Pattern;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -49,7 +48,7 @@ public class AuthorizeController {
 
 	/***
 	 * 实现注册功能
-	 * @param vo 接受封装的实体对象
+	 * @param vo 接收封装的实体对象
 	 * @return 是否注册成功
 	 */
 	@PostMapping("/register")
@@ -57,11 +56,21 @@ public class AuthorizeController {
 		return this.messageHandle(vo,service::registerEmailAccount);
 	}
 
+	/***
+	 * 实现重置密码的邮箱验证
+	 * @param vo 接收封装的实体对象
+	 * @return 邮箱是否成功
+	 */
 	@PostMapping("/reset-confirm")
 	public RestBean<Void> resetConfirm(@RequestBody @Valid ConfirmResetVO vo){
 		return this.messageHandle(vo,service::resetConfirm);
 	}
 
+	/***
+	 * 重设账号密码
+	 * @param vo 接收封装的实体对象
+	 * @return 密码是否是否成功
+	 */
 	@PostMapping("/reset-password")
 	public RestBean<Void> resetConfirm(@RequestBody @Valid EmailResetVO vo){
 		return this.messageHandle(vo,service::resetEmailAccountPassword);

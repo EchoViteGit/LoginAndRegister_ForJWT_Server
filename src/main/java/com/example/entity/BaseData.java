@@ -10,6 +10,8 @@ import java.util.function.Consumer;
  * @author 郭宏洋
  * @version 1.0.0
  * @DateTime 2023/8/29 13:54
+ *
+ * 对象转换小工具
  */
 
 public interface BaseData {

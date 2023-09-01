@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 @Order(Const.ORDER_LIMIT)
-//进行限流
+//进行限流操作
 public class FlowLimitFilter extends HttpFilter {
 
 	@Resource

@@ -1,34 +1,47 @@
 spring:
   security:
-    jwt:
+    jwt: # JWT的密钥
       key: abcdefghijklmn
+      # JWT的过期时间（单位：秒）
       expire: 7
 
-  mail:
+  mail: # 邮件服务器地址
     host: smtp.163.com
+    # 邮件服务器的密码
     password: WPEUJPCKOTXJHWKM
+    # 邮件服务器的用户名
     username: redis_validate_007@163.com
+    # 邮件服务器的端口号
     port: 465
+    # 邮件发送者的信息
     properties:
       from: redis_validate_007@163.com
       mail:
         smtp:
           socketFactory:
+            # SMTP连接的Socket工厂类
             class: javax.net.ssl.SSLSocketFactory
-  rabbitmq:
+
+  rabbitmq: # RabbitMQ服务器的用户名
     username: root
+    # RabbitMQ服务器的地址
     addresses: 192.168.75.129
+    # RabbitMQ服务器的密码
     password: 20011118
+    # RabbitMQ服务器的端口号
     port: 5672
 
-  datasource:
+  datasource: # 数据库连接URL
     url: jdbc:mysql://localhost:3306/jwt?useUnicode=true&characterEncoding=utf-8
+    # 数据库用户名
     username: root
+    # 数据库密码
     password: 20011118
+    # 数据库驱动类名
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   data:
-    redis:
+    redis: # Redis服务器地址
       host: 192.168.75.129
+      # Redis客户端类型
       client-type: lettuce
-

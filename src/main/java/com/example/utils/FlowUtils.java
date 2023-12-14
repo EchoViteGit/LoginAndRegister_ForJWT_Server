@@ -13,17 +13,27 @@ import java.util.concurrent.TimeUnit;
  * @version 1.0.0
  * @DateTime 2023/8/30 10:45
  */
+// 限流工具
 @Component
 public class FlowUtils {
-	//限流工具
+
 	@Resource
 	StringRedisTemplate template;
-	public boolean limitOnceCheck(String key,int blockTime){
-		if(Boolean.TRUE.equals(template.hasKey(key))){
+
+	/**
+	 * 检查是否限流
+	 *
+	 * @param key       键名
+	 * @param blockTime 块时长
+	 * @return 是否限流
+	 */
+	public boolean limitOnceCheck(String key , int blockTime) {
+		if (Boolean.TRUE.equals(template.hasKey(key))) {
 			return false;
-		}else {
-			template.opsForValue().set(key,"限流",blockTime, TimeUnit.SECONDS);
+		} else {
+			template.opsForValue().set(key , "限流" , blockTime , TimeUnit.SECONDS);
 			return true;
 		}
 	}
 }
+

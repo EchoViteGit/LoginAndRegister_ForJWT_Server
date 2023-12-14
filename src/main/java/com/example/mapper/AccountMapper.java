@@ -1,7 +1,7 @@
 package com.example.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.entity.dto.Account;
+import com.example.entity.dto.AccountDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -12,5 +12,5 @@ import org.apache.ibatis.annotations.Mapper;
  * @DateTime 2023/8/29 12:48
  */
 @Mapper
-public interface AccountMapper extends BaseMapper<Account> {
+public interface AccountMapper extends BaseMapper<AccountDTO> {
 }

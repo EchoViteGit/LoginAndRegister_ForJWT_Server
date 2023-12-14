@@ -10,19 +10,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  * @author 郭宏洋
  * @version 1.0.0
  * @DateTime 2023/8/29 13:00
- *
+ * <p>
  * web配置
- *
  */
-
 @Configuration
 public class WebConfiguration {
+
 	/***
 	 * 密码加密器
 	 * @return Bean
 	 */
 	@Bean
-	public BCryptPasswordEncoder passwordEncoder(){
+	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 }

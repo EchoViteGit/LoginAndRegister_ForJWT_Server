@@ -20,12 +20,16 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-/**
+/*
  * Created with IntelliJ IDEA
  *
  * @author 郭宏洋
  * @version 1.0.0
  * @DateTime 2023/8/28 21:17
+ */
+
+/**
+ * JWT工具类
  */
 @Component
 public class JWTUtils {
@@ -39,7 +43,13 @@ public class JWTUtils {
 	@Resource
 	StringRedisTemplate template;
 
-	public boolean invalidateJwt(String headerToken){
+	/**
+	 * 使JWT无效
+	 *
+	 * @param headerToken JWT头令牌
+	 * @return 是否使JWT无效
+	 */
+	public boolean invalidateJwt(String headerToken) {
 		String token = this.convertToken(headerToken);
 		if (token == null)
 			return false;
@@ -48,26 +58,45 @@ public class JWTUtils {
 		try {
 			DecodedJWT jwt = jwtVerifier.verify(token);
 			String id = jwt.getId();
-			return deleteToken(id,jwt.getExpiresAt());
-		}catch (JWTVerificationException e){
+			return deleteToken(id , jwt.getExpiresAt());
+		} catch ( JWTVerificationException e ) {
 			return false;
 		}
 	}
 
-	private boolean deleteToken(String uuid,Date time){
+	/**
+	 * 删除Token
+	 *
+	 * @param uuid Token的唯一标识
+	 * @param time Token过期时间
+	 * @return 是否成功删除Token
+	 */
+	private boolean deleteToken(String uuid , Date time) {
 		if (this.isInvalidToken(uuid))
 			return false;
 		Date now = new Date();
-		long expire = Math.max(time.getTime()-now.getTime(),0);
-		template.opsForValue().set(Const.JWT_BLACK_LIST + uuid,"",expire, TimeUnit.MILLISECONDS);
+		long expire = Math.max(time.getTime() - now.getTime() , 0);
+		template.opsForValue().set(Const.JWT_BLACK_LIST + uuid , "" , expire , TimeUnit.MILLISECONDS);
 		return true;
 	}
 
-	private boolean isInvalidToken(String uuid){
+	/**
+	 * 判断Token是否无效
+	 *
+	 * @param uuid Token的唯一标识
+	 * @return Token是否无效
+	 */
+	private boolean isInvalidToken(String uuid) {
 		return Boolean.TRUE.equals(template.hasKey(Const.JWT_BLACK_LIST + uuid));
 	}
 
-	public DecodedJWT resolveJwt(String headerToken){
+	/**
+	 * 解析JWT
+	 *
+	 * @param headerToken JWT头令牌
+	 * @return 解析后的JWT
+	 */
+	public DecodedJWT resolveJwt(String headerToken) {
 		String token = this.convertToken(headerToken);
 		if (token == null)
 			return null;
@@ -75,29 +104,44 @@ public class JWTUtils {
 		JWTVerifier jwtVerifier = JWT.require(algorithm).build();
 		try {
 			DecodedJWT Verify = jwtVerifier.verify(token);
-			if(this.isInvalidToken(Verify.getId()))
+			if (this.isInvalidToken(Verify.getId()))
 				return null;
 			Date expiresAt = Verify.getExpiresAt();
-			return new Date().after(expiresAt)?null:Verify;
-		}catch (JWTVerificationException e){
+			return new Date().after(expiresAt) ? null : Verify;
+		} catch ( JWTVerificationException e ) {
 			return null;
 		}
 	}
-	public String CreateJwt(UserDetails details,int id,String username){
+
+	/**
+	 * 创建JWT
+	 *
+	 * @param details  用户详情
+	 * @param id       用户ID
+	 * @param username 用户名
+	 * @return 创建的JWT
+	 */
+	public String CreateJwt(UserDetails details , int id , String username) {
 		Algorithm algorithm = Algorithm.HMAC256(key);
 		Date expire = this.expireTime();
 		return JWT.create()
 				.withJWTId(UUID.randomUUID().toString())
-				.withClaim("id",id )
-				.withClaim("name", username)
-				.withClaim("authorities",details.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
+				.withClaim("id" , id)
+				.withClaim("name" , username)
+				.withClaim("authorities" , details.getAuthorities().stream().map(GrantedAuthority :: getAuthority).toList())
 				.withExpiresAt(expire)
 				.withIssuedAt(new Date())
 				.sign(algorithm);
 	}
 
-	public UserDetails toUser(DecodedJWT jwt){
-		Map<String,Claim> claims = jwt.getClaims();
+	/**
+	 * 将解析后的JWT转换为User对象
+	 *
+	 * @param jwt 解析后的JWT
+	 * @return 转换后的User对象
+	 */
+	public UserDetails toUser(DecodedJWT jwt) {
+		Map<String, Claim> claims = jwt.getClaims();
 		return User
 				.withUsername(claims.get("name").asString())
 				.password("******")
@@ -105,19 +149,38 @@ public class JWTUtils {
 				.build();
 	}
 
-	public Integer toId(DecodedJWT jwt){
-		Map<String,Claim> claims = jwt.getClaims();
+	/**
+	 * 获取解析后的JWT中的用户ID
+	 *
+	 * @param jwt 解析后的JWT
+	 * @return 用户ID
+	 */
+	public Integer toId(DecodedJWT jwt) {
+		Map<String, Claim> claims = jwt.getClaims();
 		return claims.get("id").asInt();
 	}
-	public Date expireTime(){
+
+	/**
+	 * 获取Token的过期时间
+	 *
+	 * @return Token的过期时间
+	 */
+	public Date expireTime() {
 		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.HOUR,expire*24);
+		calendar.add(Calendar.HOUR , expire * 24);
 		return calendar.getTime();
 	}
 
-	private String convertToken(String headerToken){
-		if(headerToken==null||!headerToken.startsWith("Bearer "))
+	/**
+	 * 将Token转换为字符串形式
+	 *
+	 * @param headerToken JWT头令牌
+	 * @return 转换后的字符串
+	 */
+	private String convertToken(String headerToken) {
+		if (headerToken == null || ! headerToken.startsWith("Bearer "))
 			return null;
 		return headerToken.substring(7);
 	}
 }
+

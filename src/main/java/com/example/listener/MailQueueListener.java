@@ -1,5 +1,6 @@
 package com.example.listener;
 
+import com.alibaba.fastjson2.JSONObject;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
@@ -11,7 +12,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA
@@ -31,7 +31,7 @@ public class MailQueueListener {
 	String username;  // 邮箱用户名
 
 	@RabbitHandler
-	public void sendMailMessage(Map<String, Object> data) {
+	public void sendMailMessage(JSONObject data) {
 		String email = (String) data.get("email");  // 接收邮件地址
 		Integer code = (Integer) data.get("code");  // 接收验证码
 		String type = (String) data.get("type");  // 接收消息类型

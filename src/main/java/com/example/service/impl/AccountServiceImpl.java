@@ -1,5 +1,6 @@
 package com.example.service.impl;
 
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.entity.dto.AccountDTO;
@@ -55,7 +56,9 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, AccountDTO> i
 	 * 根据用户名加载用户详情信息。
 	 *
 	 * @param username 用户名
+	 *
 	 * @return 用户详情信息
+	 *
 	 * @throws UsernameNotFoundException 当找不到与用户名对应的用户时抛出异常
 	 */
 	@Override
@@ -74,6 +77,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, AccountDTO> i
 	 * 根据指定的文本在数据库中查找账户信息。
 	 *
 	 * @param text 指定的文本
+	 *
 	 * @return 匹配的账户信息
 	 */
 	public AccountDTO findAccountByNameOrEmail(String text) {
@@ -90,6 +94,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, AccountDTO> i
 	 * @param type  验证码类型
 	 * @param email 邮箱地址
 	 * @param ip    用户IP
+	 *
 	 * @return 如果发送请求过于频繁则返回提示信息，否则返回null
 	 */
 	@Override
@@ -101,7 +106,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, AccountDTO> i
 			Random random = new Random();
 			int code = random.nextInt(899999) + 100000;
 			Map<String, Object> data = Map.of("type" , type , "email" , email , "code" , code);
-			amqpTemplate.convertAndSend("mail" , data);
+			amqpTemplate.convertAndSend("mail" , JSON.toJSON(data));
 			stringRedisTemplate.opsForValue()
 					.set(Const.VERIFY_EMAIL_DATA + email , String.valueOf(code) , 3 , TimeUnit.MINUTES);//3分钟有效
 			return null;
@@ -112,6 +117,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, AccountDTO> i
 	 * 检查用户IP是否在指定的时间内超过限制次数。
 	 *
 	 * @param ip 用户IP
+	 *
 	 * @return 如果不超过限制次数则返回true，否则返回false
 	 */
 	private boolean verifyLimit(String ip) {
@@ -123,6 +129,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, AccountDTO> i
 	 * 注册新用户账户。
 	 *
 	 * @param vo 邮箱注册信息
+	 *
 	 * @return 如果注册成功则返回null，否则返回错误提示信息
 	 */
 	@Override
@@ -152,6 +159,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, AccountDTO> i
 	 * 重置用户邮箱账户密码。
 	 *
 	 * @param vo 邮箱重置信息
+	 *
 	 * @return 如果密码重置成功则返回null，否则返回错误提示信息
 	 */
 	@Override
@@ -172,6 +180,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, AccountDTO> i
 	 * 验证密码重置请求是否合法。
 	 *
 	 * @param vo 验证信息
+	 *
 	 * @return 如果验证通过则返回null，否则返回错误提示信息
 	 */
 	@Override
@@ -195,6 +204,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, AccountDTO> i
 	 * 判断是否存在指定邮箱的账户。
 	 *
 	 * @param email 邮箱地址
+	 *
 	 * @return 如果存在指定邮箱的账户则返回true，否则返回false
 	 */
 	private boolean existsAccountByEmail(String email) {
@@ -208,6 +218,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, AccountDTO> i
 	 * 判断是否存在指定用户名的账户。
 	 *
 	 * @param username 用户名
+	 *
 	 * @return 如果存在指定用户名的账户则返回true，否则返回false
 	 */
 	private boolean existsAccountByUsername(String username) {

@@ -1,8 +1,8 @@
 spring:
   security:
     jwt: # JWT的密钥
-      key: abcdefghijklmn
-      # JWT的过期时间（单位：秒）
+      key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJB
+      # JWT的过期时间（单位：天）
       expire: 7
 
   mail: # 邮件服务器地址
@@ -42,6 +42,6 @@ spring:
 
   data:
     redis: # Redis服务器地址
-      host: 192.168.75.129
+      host: 127.0.0.1
       # Redis客户端类型
       client-type: lettuce
